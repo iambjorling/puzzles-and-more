@@ -6,7 +6,7 @@ import plotly.express as px
 def mirror(df, xmax=250):
     ### Make sure waveform is symmetrical by dropping all x > y and mirroring it ###
     df = df[df.y >= df.x].sort_values(by='x').drop_duplicates()
-    if (df.x.iloc[-1] == df.y.iloc[-1]):   # 250o need to copy the last element as it will be duplicated then
+    if (df.x.iloc[-1] == df.y.iloc[-1]):   # No need to copy the last element as it will be duplicated then
         df2 = pd.DataFrame({'x': df.y.iloc[:-1][::-1],
                             'y': df.x.iloc[:-1][::-1]})
     else:
