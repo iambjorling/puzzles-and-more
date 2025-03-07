@@ -191,7 +191,7 @@ class Waveform:
         all_points = pd.DataFrame([(x, y) for x in range(0,250+1) for y in range(0,250+1)], columns=['x', 'y'])
 
         # Plot data
-        fig1 = px.line(plot_data, x="x", y="y", color='Waveform')
+        fig1 = px.line(plot_data, x="x", y="y", color='Waveform', markers=True)
         if plot_points:
             fig2 = px.scatter(all_points, x="x", y="y")
             fig2.update_traces(marker=dict(size=1, color='black'))
