@@ -5,8 +5,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 class Waveform:
-    def __init__(self, wf=pd.DataFrame([], columns=['x','y'])):   # Initialize as square
-        assert isinstance(wf, pd.DataFrame) and all(wf.columns.values == ['x', 'y']) and (wf.shape[1]==2), f"wf must be a pandas data frame with two columns, called x and y. Was {wf}"
+    def __init__(self, wf=pd.DataFrame([], columns=['x','y'])):
+        assert isinstance(wf, pd.DataFrame), f"wf must be a pandas data frame with two columns, called x and y. Was {wf}"
+        assert all(wf.columns.values == ['x', 'y']), f"wf must be a pandas data frame with two columns, called x and y. Was {wf}"
+        assert (wf.shape[1]==2), f"wf must be a pandas data frame with two columns, called x and y. Was {wf}"
 
         # Make sure waveform contains no duplicates and is symmetrical around the y=x line
         if (wf.shape[0]==0):
@@ -22,7 +24,7 @@ class Waveform:
 
     def calc_performance(self):
         area = (self.wf.x.diff()[1:] * self.wf.y.rolling(2).mean()[1:]).sum()
-        length = np.sqrt(self.wf.x.diff()[1:]**2 + self.wf.y.diff()[1:]**2).sum() 
+        length = np.sqrt((self.wf.x.diff()[1:]**2 + self.wf.y.diff()[1:]**2).apply(float)).sum() 
         return area/length
 
     def move(self, x, n):
@@ -78,7 +80,7 @@ class Waveform:
             else:
                 df2 = pd.DataFrame({'x': df.y[::-1],
                                     'y': df.x[::-1]})
-            out = pd.concat([df, df2], ignore_index=True).reset_index(drop=True)
+            out = pd.concat([df, df2], ignore_index=True).reset_index(drop=True).copy()
             return out
 
     @staticmethod
